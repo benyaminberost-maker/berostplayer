@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Berost Player</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     AUTH
+===================================================== -->
+
+<div id="authPage" class="auth-page">
+
+    <div class="auth-box">
+
+        <div class="brand-big">
+
+            <div class="brand-icon">
+                B
+            </div>
+
+            <h1>
+                Berost Player
+            </h1>
+
+            <p>
+                پلتفرم آموزش و لایسنس
+            </p>
+
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <div id="loginBox">
+
+            <h2>
+                ورود
+            </h2>
+
+            <label>
+                نام کاربری
+            </label>
+
+            <input
+                id="loginUsername"
+                autocomplete="username"
+                placeholder="مثلاً benyamin"
+            >
+
+            <label>
+                رمز عبور
+            </label>
+
+            <input
+                id="loginPassword"
+                type="password"
+                autocomplete="current-password"
+                placeholder="رمز عبور"
+            >
+
+            <button
+                class="primary-button"
+                onclick="login()"
+            >
+                ورود
+            </button>
+
+            <p class="switch-text">
+
+                حساب نداری؟
+
+                <button
+                    class="text-button"
+                    onclick="showRegister()"
+                >
+                    ثبت‌نام
+                </button>
+
+            </p>
+
+        </div>
+
+
+        <!-- REGISTER -->
+
+        <div id="registerBox" hidden>
+
+            <h2>
+                ساخت حساب
+            </h2>
+
+            <label>
+                نام کاربری
+            </label>
+
+            <input
+                id="registerUsername"
+                autocomplete="username"
+                placeholder="فقط حروف انگلیسی، عدد و _"
+            >
+
+            <label>
+                رمز عبور
+            </label>
+
+            <input
+                id="registerPassword"
+                type="password"
+                autocomplete="new-password"
+            >
+
+            <label>
+                تکرار رمز عبور
+            </label>
+
+            <input
+                id="registerPassword2"
+                type="password"
+                autocomplete="new-password"
+            >
+
+            <button
+                class="primary-button"
+                onclick="register()"
+            >
+                ساخت حساب
+            </button>
+
+            <p class="switch-text">
+
+                حساب داری؟
+
+                <button
+                    class="text-button"
+                    onclick="showLogin()"
+                >
+                    ورود
+                </button>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     APPLICATION
+===================================================== -->
+
+<div id="appPage" hidden>
+
+
+<header class="topbar">
+
+    <div class="brand-small">
+
+        <span>
+            B
+        </span>
+
+        Berost Player
+
+    </div>
+
+
+    <nav>
+
+        <button
+            onclick="goHome()"
+        >
+            🏠 خانه
+        </button>
+
+        <button
+            onclick="goMyLicenses()"
+        >
+            📚 لایسنس‌های من
+        </button>
+
+        <button
+            onclick="goMessenger()"
+        >
+            💬 پیام‌رسان
+        </button>
+
+        <button
+            onclick="goEntertainment()"
+        >
+            🎮 سرگرمی
+        </button>
+
+    </nav>
+
+
+    <div class="user-menu">
+
+        <button
+            class="profile-mini-button"
+            onclick="openMyProfile()"
+        >
+
+            <span id="currentUserAvatar">
+                👤
+            </span>
+
+            <span id="currentUsername">
+                ...
+            </span>
+
+        </button>
+
+        <button
+            onclick="logout()"
+        >
+            خروج
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+<!-- =====================================================
+     HOME
+===================================================== -->
+
+<section
+    id="homePage"
+    class="page"
+>
+
+    <div class="hero">
+
+        <div>
+
+            <span class="hero-label">
+                BEROST PLAYER
+            </span>
+
+            <h1>
+                آموزش را وارد کن،
+                <br>
+                یادگیری را شروع کن.
+            </h1>
+
+            <p>
+                کد یا لینک لایسنس خودت را وارد کن.
+            </p>
+
+        </div>
+
+
+        <div class="join-box">
+
+            <input
+                id="licenseInput"
+                placeholder="کد یا لینک لایسنس"
+            >
+
+            <button
+                onclick="joinLicense()"
+            >
+                ورود به لایسنس
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MY LICENSES -->
+
+    <section class="content-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    📚 لایسنس‌های من
+                </h2>
+
+                <p>
+                    لایسنس‌هایی که ساخته‌ای یا واردشان شده‌ای
+                </p>
+
+            </div>
+
+
+            <button
+                class="primary-small"
+                onclick="openCreateLicenseModal()"
+            >
+                + ساخت لایسنس
+            </button>
+
+        </div>
+
+
+        <div
+            id="licensesGrid"
+            class="licenses-grid"
+        ></div>
+
+    </section>
+
+
+
+    <!-- HOME LINKS -->
+
+    <section
+        id="homeLinksSection"
+        class="content-section"
+    >
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    🔗 لینک‌ها
+                </h2>
+
+                <p>
+                    لینک‌های ویژه Berost
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="homeLinksGrid"
+            class="home-links-grid"
+        ></div>
+
+    </section>
+
+
+
+    <!-- ADMIN -->
+
+    <section
+        id="adminSection"
+        class="content-section"
+        hidden
+    >
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    ⭐ پنل ویژه Berost
+                </h2>
+
+                <p>
+                    مدیریت لینک‌های صفحه اصلی و چت‌ها
+                </p>
+
+            </div>
+
+            <button
+                class="admin-plus"
+                onclick="openHomeLinkModal()"
+            >
+                +
+            </button>
+
+        </div>
+
+
+        <button
+            class="danger-button"
+            onclick="clearAllChats()"
+        >
+            🗑 پاک کردن حافظه تمام چت‌ها
+        </button>
+
+    </section>
+
+
+
+    <!-- PUBLIC CHAT -->
+
+    <section class="content-section">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    💬 چت عمومی
+                </h2>
+
+                <p>
+                    همه کاربران می‌توانند اینجا گفتگو کنند.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="chat">
+
+            <div
+                id="publicMessages"
+                class="messages"
+            ></div>
+
+
+            <div class="chat-composer">
+
+                <input
+                    id="publicText"
+                    placeholder="پیامت را بنویس..."
+                    onkeydown="handleEnter(event,sendPublicMessage)"
+                >
+
+                <label
+                    class="attach-button"
+                    title="آپلود فایل"
+                >
+
+                    📎
+
+                    <input
+                        id="publicFile"
+                        type="file"
+                        hidden
+                    >
+
+                </label>
+
+                <button
+                    onclick="startPublicVoiceRecording()"
+                    title="ضبط ویس"
+                >
+                    🎙️
+                </button>
+
+                <button
+                    onclick="openGifPicker('public')"
+                    title="GIF"
+                >
+                    GIF
+                </button>
+
+                <button
+                    onclick="openStickerPicker('public')"
+                    title="استیکر"
+                >
+                    😊
+                </button>
+
+                <button
+                    onclick="sendPublicMessage()"
+                >
+                    ارسال
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</section>
+
+
+
+<!-- =====================================================
+     MESSENGER
+===================================================== -->
+
+<section
+    id="messengerPage"
+    class="page"
+    hidden
+>
+
+    <div class="section-header">
+
+        <div>
+
+            <h1>
+                💬 پیام‌رسان Berost
+            </h1>
+
+            <p>
+                با کاربران گفتگو کن یا گروه بساز.
+            </p>
+
+        </div>
+
+
+        <button
+            class="primary-small"
+            onclick="openCreateGroupModal()"
+        >
+            + ساخت گروه
+        </button>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="messenger-search-box">
+
+        <h3>
+            🔎 پیدا کردن کاربر
+        </h3>
+
+        <p>
+            نام کاربری و رمز عبور حساب را وارد کنید تا کاربر پیدا شود.
+        </p>
+
+
+        <div class="messenger-search-row">
+
+            <input
+                id="messengerSearchUsername"
+                placeholder="نام کاربری"
+                autocomplete="off"
+            >
+
+            <input
+                id="messengerSearchPassword"
+                type="password"
+                placeholder="رمز عبور"
+                autocomplete="off"
+            >
+
+            <button
+                class="primary-small"
+                onclick="searchMessengerUser()"
+            >
+                پیدا کردن
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- USER RESULT -->
+
+    <div
+        id="messengerSearchResult"
+        class="messenger-search-result"
+        hidden
+    ></div>
+
+
+    <div class="messenger-layout">
+
+
+        <!-- CONVERSATIONS -->
+
+        <aside class="messenger-sidebar">
+
+            <div class="messenger-sidebar-title">
+
+                <h3>
+                    گفتگوها
+                </h3>
+
+                <button
+                    onclick="refreshMessengerConversations()"
+                    title="بروزرسانی"
+                >
+                    ↻
+                </button>
+
+            </div>
+
+
+            <div
+                id="messengerConversations"
+                class="messenger-conversations"
+            ></div>
+
+        </aside>
+
+
+        <!-- CHAT -->
+
+        <section class="messenger-chat">
+
+            <div
+                id="messengerEmpty"
+                class="messenger-empty"
+            >
+
+                <div>
+                    💬
+                </div>
+
+                <h2>
+                    یک گفتگو را انتخاب کن
+                </h2>
+
+                <p>
+                    از سمت راست یک گفتگو را انتخاب کن.
+                </p>
+
+            </div>
+
+
+            <div
+                id="messengerActiveChat"
+                hidden
+            >
+
+                <div class="messenger-chat-header">
+
+                    <button
+                        id="messengerChatProfileButton"
+                        onclick="openActiveConversationProfile()"
+                    >
+
+                        <span
+                            id="messengerChatAvatar"
+                        >
+                            👤
+                        </span>
+
+                        <span>
+
+                            <strong
+                                id="messengerChatTitle"
+                            >
+                                گفتگو
+                            </strong>
+
+                            <small
+                                id="messengerChatSubtitle"
+                            >
+                            </small>
+
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        id="messengerGroupMembersButton"
+                        onclick="openGroupMembersModal()"
+                        hidden
+                    >
+                        👥 اعضا
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="messengerMessages"
+                    class="messages messenger-messages"
+                ></div>
+
+
+                <div class="messenger-attachment-preview">
+
+                    <span
+                        id="messengerAttachmentName"
+                    ></span>
+
+                    <button
+                        id="messengerAttachmentRemove"
+                        onclick="clearMessengerAttachment()"
+                        hidden
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+                <div class="chat-composer messenger-composer">
+
+                    <label
+                        class="attach-button"
+                        title="فایل"
+                    >
+
+                        📎
+
+                        <input
+                            id="messengerFile"
+                            type="file"
+                            hidden
+                            onchange="handleMessengerFile(this)"
+                        >
+
+                    </label>
+
+
+                    <button
+                        onclick="toggleMessengerVoice()"
+                        title="ویس"
+                    >
+                        🎙️
+                    </button>
+
+
+                    <button
+                        onclick="openGifPicker('messenger')"
+                        title="GIF"
+                    >
+                        GIF
+                    </button>
+
+
+                    <button
+                        onclick="openStickerPicker('messenger')"
+                        title="استیکر"
+                    >
+                        😊
+                    </button>
+
+
+                    <input
+                        id="messengerText"
+                        placeholder="پیام..."
+                        onkeydown="handleEnter(event,sendMessengerMessage)"
+                    >
+
+
+                    <button
+                        onclick="sendMessengerMessage()"
+                    >
+                        ارسال
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     PROFILE PAGE
+===================================================== -->
+
+<section
+    id="profilePage"
+    class="page"
+    hidden
+>
+
+    <button
+        class="back-button"
+        onclick="goBackFromProfile()"
+    >
+        ← بازگشت
+    </button>
+
+
+    <div class="profile-page-card">
+
+        <div
+            id="profilePageAvatar"
+            class="profile-large-avatar"
+        >
+            👤
+        </div>
+
+
+        <h1
+            id="profilePageUsername"
+        >
+            username
+        </h1>
+
+
+        <h3
+            id="profilePageDisplayName"
+        >
+        </h3>
+
+
+        <p
+            id="profilePageBio"
+            class="profile-bio"
+        >
+        </p>
+
+
+        <div
+            id="profilePageActions"
+            class="profile-actions"
+        ></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     LICENSE PAGE
+===================================================== -->
+
+<section
+    id="licensePage"
+    class="page"
+    hidden
+>
+
+    <button
+        class="back-button"
+        onclick="goHome()"
+    >
+        ← بازگشت
+    </button>
+
+
+    <div class="license-banner">
+
+        <div>
+
+            <div class="license-crown">
+                🎓
+            </div>
+
+        </div>
+
+
+        <div class="license-info">
+
+            <h1 id="licenseName">
+                لایسنس
+            </h1>
+
+            <p id="licenseDescription">
+            </p>
+
+            <div class="license-code">
+
+                کد:
+
+                <strong id="licenseCode">
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <button
+            id="deleteLicenseButton"
+            class="danger-button"
+            onclick="deleteCurrentLicense()"
+            hidden
+        >
+            🗑 حذف لایسنس
+        </button>
+
+    </div>
+
+
+
+    <!-- TABS -->
+
+    <div class="license-tabs">
+
+        <button
+            id="tabVideos"
+            onclick="openLicenseTab('videos')"
+        >
+            🎬 ویدیوها
+        </button>
+
+        <button
+            onclick="openLicenseTab('shorts')"
+        >
+            📱 Shorts
+        </button>
+
+        <button
+            onclick="openLicenseTab('group')"
+        >
+            👥 گروه
+        </button>
+
+        <button
+            onclick="openLicenseTab('private')"
+        >
+            💬 پیوی
+        </button>
+
+        <button
+            onclick="openLicenseTab('members')"
+        >
+            👤 اعضا
+        </button>
+
+        <button
+            id="manageTab"
+            onclick="openLicenseTab('manage')"
+        >
+            ⚙ مدیریت
+        </button>
+
+    </div>
+
+
+
+    <!-- VIDEOS -->
+
+    <div
+        id="videosTab"
+        class="license-content"
+    >
+
+        <div class="folder-navigation">
+
+            <button
+                id="parentFolderButton"
+                onclick="goParentFolder()"
+                hidden
+            >
+                ← پوشه قبل
+            </button>
+
+            <h2 id="folderTitle">
+                📚 پوشه اصلی
+            </h2>
+
+        </div>
+
+
+        <div
+            id="foldersGrid"
+            class="folders-grid"
+        ></div>
+
+
+        <div
+            id="videosGrid"
+            class="videos-grid"
+        ></div>
+
+    </div>
+
+
+
+    <!-- SHORTS -->
+
+    <div
+        id="shortsTab"
+        class="license-content"
+        hidden
+    >
+
+        <div class="section-header">
+
+            <div>
+
+                <h2>
+                    📱 Shorts
+                </h2>
+
+                <p>
+                    ویدیوهای کوتاه این لایسنس
+                </p>
+
+            </div>
+
+            <button
+                id="addShortButton"
+                class="primary-small"
+                onclick="openShortModal()"
+            >
+                + افزودن Short
+            </button>
+
+        </div>
+
+
+        <div
+            id="shortsGrid"
+            class="shorts-grid"
+        ></div>
+
+    </div>
+
+
+
+    <!-- GROUP -->
+
+    <div
+        id="groupTab"
+        class="license-content"
+        hidden
+    >
+
+        <div class="chat">
+
+            <div class="chat-title">
+
+                <div>
+                    👥 گروه لایسنس
+                </div>
+
+                <span>
+                    سازنده + تمام اعضا
+                </span>
+
+            </div>
+
+
+            <div
+                id="groupMessages"
+                class="messages"
+            ></div>
+
+
+            <div class="chat-composer">
+
+                <input
+                    id="groupText"
+                    placeholder="پیام گروه..."
+                    onkeydown="handleEnter(event,sendGroupMessage)"
+                >
+
+                <label class="attach-button">
+
+                    📎
+
+                    <input
+                        id="groupFile"
+                        type="file"
+                        hidden
+                    >
+
+                </label>
+
+                <button
+                    onclick="startGroupVoiceRecording()"
+                    title="ضبط ویس"
+                >
+                    🎙️
+                </button>
+
+                <button
+                    onclick="openGifPicker('group')"
+                >
+                    GIF
+                </button>
+
+                <button
+                    onclick="openStickerPicker('group')"
+                >
+                    😊
+                </button>
+
+                <button
+                    onclick="sendGroupMessage()"
+                >
+                    ارسال
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- PRIVATE -->
+
+    <div
+        id="privateTab"
+        class="license-content"
+        hidden
+    >
+
+        <!--
+            برای مالک لایسنس:
+            به جای "پیوی سازنده خودش"
+            لیست اعضا نمایش داده می‌شود.
+        -->
+
+        <div
+            id="privateOwnerMembers"
+            class="private-owner-members"
+            hidden
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        💬 پیام خصوصی اعضا
+                    </h2>
+
+                    <p>
+                        روی هر عضو کلیک کن تا پیام‌های خصوصی او را ببینی.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="privateMembersGrid"
+                class="members-grid"
+            ></div>
+
+        </div>
+
+
+        <!-- MEMBER PRIVATE CHAT -->
+
+        <div
+            id="privateChatBox"
+            class="chat"
+            hidden
+        >
+
+            <div class="chat-title">
+
+                <div>
+
+                    💬 پیام خصوصی
+
+                </div>
+
+                <span
+                    id="privateTargetName"
+                >
+                    کاربر
+                </span>
+
+            </div>
+
+
+            <div
+                id="privateMessages"
+                class="messages"
+            ></div>
+
+
+            <div class="chat-composer">
+
+                <input
+                    id="privateText"
+                    placeholder="پیام خصوصی..."
+                    onkeydown="handleEnter(event,sendPrivateMessage)"
+                >
+
+                <label class="attach-button">
+
+                    📎
+
+                    <input
+                        id="privateFile"
+                        type="file"
+                        hidden
+                    >
+
+                </label>
+
+                <button
+                    onclick="startPrivateVoiceRecording()"
+                    title="ضبط ویس"
+                >
+                    🎙️
+                </button>
+
+                <button
+                    onclick="openGifPicker('private')"
+                >
+                    GIF
+                </button>
+
+                <button
+                    onclick="openStickerPicker('private')"
+                >
+                    😊
+                </button>
+
+                <button
+                    onclick="sendPrivateMessage()"
+                >
+                    ارسال
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- MEMBERS -->
+
+    <div
+        id="membersTab"
+        class="license-content"
+        hidden
+    >
+
+        <h2>
+            👤 اعضای لایسنس
+        </h2>
+
+        <div
+            id="membersGrid"
+            class="members-grid"
+        ></div>
+
+    </div>
+
+
+
+    <!-- MANAGEMENT -->
+
+    <div
+        id="manageTabContent"
+        class="license-content"
+        hidden
+    >
+
+        <div class="manage-actions">
+
+            <button
+                onclick="openFolderModal()"
+            >
+                📁 ساخت پوشه
+            </button>
+
+            <button
+                onclick="openVideoModal()"
+            >
+                🎬 افزودن ویدیو
+            </button>
+
+            <button
+                onclick="openShortModal()"
+            >
+                📱 افزودن Short
+            </button>
+
+        </div>
+
+
+        <h2>
+            📁 ساختار لایسنس
+        </h2>
+
+
+        <div
+            id="manageTree"
+            class="manage-tree"
+        ></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     VIDEO PLAYER
+===================================================== -->
+
+<section
+    id="playerPage"
+    class="player-page"
+    hidden
+>
+
+    <div class="player-top">
+
+        <button
+            onclick="closePlayer()"
+        >
+            ← برگشت
+        </button>
+
+        <span id="playerLicenseName">
+        </span>
+
+    </div>
+
+
+    <div class="player-wrapper">
+
+        <video
+            id="videoPlayer"
+            controls
+            playsinline
+            preload="metadata"
+        ></video>
+
+        <h1 id="playerVideoTitle">
+        </h1>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     ENTERTAINMENT
+===================================================== -->
+
+<section
+    id="entertainmentPage"
+    class="page"
+    hidden
+>
+
+    <div class="game-wrapper">
+
+        <h1>
+            🎮 سرگرمی
+        </h1>
+
+        <p>
+            دوز با ربات سخت
+        </p>
+
+
+        <div
+            id="ticBoard"
+            class="tic-board"
+        >
+
+            <button data-index="0"></button>
+            <button data-index="1"></button>
+            <button data-index="2"></button>
+
+            <button data-index="3"></button>
+            <button data-index="4"></button>
+            <button data-index="5"></button>
+
+            <button data-index="6"></button>
+            <button data-index="7"></button>
+            <button data-index="8"></button>
+
+        </div>
+
+
+        <div
+            id="ticStatus"
+            class="tic-status"
+        >
+            نوبت شما
+        </div>
+
+
+        <button
+            class="primary-small"
+            onclick="resetTicTacToe()"
+        >
+            دوباره بازی کن
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+
+<!-- =====================================================
+     MODAL
+===================================================== -->
+
+<div
+    id="modal"
+    class="modal"
+    hidden
+>
+
+    <div class="modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeModal()"
+        >
+            ×
+        </button>
+
+        <div id="modalBody"></div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     PROFILE MODAL
+===================================================== -->
+
+<div
+    id="profileModal"
+    class="modal"
+    hidden
+>
+
+    <div class="modal-box profile-modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeProfileModal()"
+        >
+            ×
+        </button>
+
+
+        <div
+            id="profileModalAvatar"
+            class="profile-large-avatar"
+        >
+            👤
+        </div>
+
+
+        <h2
+            id="profileModalUsername"
+        >
+            username
+        </h2>
+
+
+        <h3
+            id="profileModalDisplayName"
+        >
+        </h3>
+
+
+        <p
+            id="profileModalBio"
+            class="profile-bio"
+        >
+        </p>
+
+
+        <div
+            id="profileModalActions"
+            class="profile-actions"
+        ></div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     GIF PICKER
+===================================================== -->
+
+<div
+    id="gifPicker"
+    class="floating-picker"
+    hidden
+>
+
+    <div class="picker-header">
+
+        <strong>
+            GIF
+        </strong>
+
+        <button
+            onclick="closeGifPicker()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="gif-search-row">
+
+        <input
+            id="gifSearchInput"
+            placeholder="جستجوی GIF..."
+        >
+
+        <button
+            onclick="searchGifs()"
+        >
+            جستجو
+        </button>
+
+    </div>
+
+
+    <div
+        id="gifResults"
+        class="gif-results"
+    ></div>
+
+</div>
+
+
+
+<!-- =====================================================
+     STICKER PICKER
+===================================================== -->
+
+<div
+    id="stickerPicker"
+    class="floating-picker"
+    hidden
+>
+
+    <div class="picker-header">
+
+        <strong>
+            استیکرها
+        </strong>
+
+        <button
+            onclick="closeStickerPicker()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div
+        id="stickerResults"
+        class="sticker-results"
+    ></div>
+
+</div>
+
+
+
+<!-- =====================================================
+     VOICE RECORDING PANEL
+===================================================== -->
+
+<div
+    id="voiceRecorder"
+    class="voice-recorder"
+    hidden
+>
+
+    <div>
+
+        🎙️
+
+        <strong>
+            ضبط ویس
+        </strong>
+
+    </div>
+
+
+    <span
+        id="voiceTimer"
+    >
+        00:00
+    </span>
+
+
+    <button
+        id="voiceRecordButton"
+        onclick="toggleVoiceRecording()"
+    >
+        شروع ضبط
+    </button>
+
+
+    <button
+        onclick="cancelVoiceRecording()"
+    >
+        لغو
+    </button>
+
+</div>
+
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+    id="toastContainer"
+    class="toast-container"
+></div>
+
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
